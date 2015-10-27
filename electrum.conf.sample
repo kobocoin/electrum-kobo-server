@@ -28,7 +28,7 @@ pruning_limit = 100
 
 [okcashd]
 okcashd_host = localhost
-okcashd_port = 8332
+okcashd_port = 6969
 # user and password from okcash.conf
 okcashd_user = 
 okcashd_password = 
