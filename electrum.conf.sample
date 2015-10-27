@@ -26,9 +26,9 @@ path =
 # for each address, history will be pruned if it is longer than this limit
 pruning_limit = 100
 
-[bitcoind]
-bitcoind_host = localhost
-bitcoind_port = 8332
-# user and password from bitcoin.conf
-bitcoind_user = 
-bitcoind_password = 
+[okcashd]
+okcashd_host = localhost
+okcashd_port = 8332
+# user and password from okcash.conf
+okcashd_user = 
+okcashd_password = 

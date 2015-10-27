@@ -20,8 +20,8 @@ Conventions
 In this document, lines starting with a hash sign (#) or a dollar sign ($)
 contain commands. Commands starting with a hash should be run as root,
 commands starting with a dollar should be run as a normal user (in this
-document, we assume that user is called 'bitcoin'). We also assume the
-bitcoin user has sudo rights, so we use '$ sudo command' when we need to.
+document, we assume that user is called 'okcash'). We also assume the
+okcash user has sudo rights, so we use '$ sudo command' when we need to.
 
 Strings that are surrounded by "lower than" and "greater than" ( < and > )
 should be replaced by the user with something appropriate. For example,
@@ -54,9 +54,9 @@ Python libraries.
 
 **Hardware.** The lightest setup is a pruning server with diskspace 
 requirements of about 10 GB for the electrum database. However note that 
-you also need to run bitcoind and keep a copy of the full blockchain, 
+you also need to run okcashd and keep a copy of the full blockchain, 
 which is roughly 20 GB in April 2014. If you have less than 2 GB of RAM 
-make sure you limit bitcoind to 8 concurrent connections. If you have more 
+make sure you limit okcashd to 8 concurrent connections. If you have more 
 resources to spare you can run the server with a higher limit of historic 
 transactions per address. CPU speed is important for the initial block 
 chain import, but is also important if you plan to run a public Electrum server, 
@@ -67,58 +67,58 @@ has enough RAM to hold and process the leveldb database in tmpfs (e.g. /dev/shm)
 Instructions
 ------------
 
-### Step 1. Create a user for running bitcoind and Electrum server
+### Step 1. Create a user for running okcashd and Electrum server
 
 This step is optional, but for better security and resource separation I
-suggest you create a separate user just for running `bitcoind` and Electrum.
+suggest you create a separate user just for running `okcashd` and Electrum.
 We will also use the `~/bin` directory to keep locally installed files
 (others might want to use `/usr/local/bin` instead). We will download source
 code files to the `~/src` directory.
 
-    $ sudo adduser bitcoin --disabled-password
+    $ sudo adduser okcash --disabled-password
     $ sudo apt-get install git
-    $ sudo su - bitcoin
+    $ sudo su - okcash
     $ mkdir ~/bin ~/src
     $ echo $PATH
 
-If you don't see `/home/bitcoin/bin` in the output, you should add this line
+If you don't see `/home/okcash/bin` in the output, you should add this line
 to your `.bashrc`, `.profile`, or `.bash_profile`, then logout and relogin:
 
     PATH="$HOME/bin:$PATH"
     $ exit
 
-### Step 2. Download bitcoind
+### Step 2. Download okcashd
 
-Older versions of Electrum used to require a patched version of bitcoind. 
-This is not the case anymore since bitcoind supports the 'txindex' option.
-We currently recommend bitcoind 0.9.3 stable.
+Older versions of Electrum used to require a patched version of okcashd. 
+This is not the case anymore since okcashd supports the 'txindex' option.
+We currently recommend okcashd 0.9.3 stable.
 
-If your package manager does not supply a recent bitcoind or you prefer to compile it yourself,
+If your package manager does not supply a recent okcashd or you prefer to compile it yourself,
 here are some pointers for Ubuntu:
 
     $ sudo apt-get install make g++ python-leveldb libboost-all-dev libssl-dev libdb++-dev pkg-config
-    $ sudo su - bitcoin
-    $ cd ~/src && wget https://bitcoin.org/bin/0.9.3/bitcoin-0.9.3-linux.tar.gz
-    $ sha256sum bitcoin-0.9.3-linux.tar.gz | grep c425783b6cbab9b801ad6a1dcc9235828b98e5dee6675112741f8b210e4f65cd
-    $ tar xfz bitcoin-0.9.3-linux.tar.gz
-    $ cd bitcoin-0.9.3-linux/src
-    $ tar xfz bitcoin-0.9.3.tar.gz
-    $ cd bitcoin-0.9.3
+    $ sudo su - okcash
+    $ cd ~/src && wget https://okcash.org/bin/0.9.3/okcash-0.9.3-linux.tar.gz
+    $ sha256sum okcash-0.9.3-linux.tar.gz | grep c425783b6cbab9b801ad6a1dcc9235828b98e5dee6675112741f8b210e4f65cd
+    $ tar xfz okcash-0.9.3-linux.tar.gz
+    $ cd okcash-0.9.3-linux/src
+    $ tar xfz okcash-0.9.3.tar.gz
+    $ cd okcash-0.9.3
     $ ./configure --disable-wallet --without-miniupnpc
     $ make
-    $ strip ~/src/bitcoin-0.9.3-linux/src/bitcoin-0.9.3/src/bitcoind
-    $ cp -a ~/src/bitcoin-0.9.3-linux/src/bitcoin-0.9.3/src/bitcoind ~/bin/bitcoind
+    $ strip ~/src/okcash-0.9.3-linux/src/okcash-0.9.3/src/okcashd
+    $ cp -a ~/src/okcash-0.9.3-linux/src/okcash-0.9.3/src/okcashd ~/bin/okcashd
 
-### Step 3. Configure and start bitcoind
+### Step 3. Configure and start okcashd
 
-In order to allow Electrum to "talk" to `bitcoind`, we need to set up an RPC
-username and password for `bitcoind`. We will then start `bitcoind` and
+In order to allow Electrum to "talk" to `okcashd`, we need to set up an RPC
+username and password for `okcashd`. We will then start `okcashd` and
 wait for it to complete downloading the blockchain.
 
-    $ mkdir ~/.bitcoin
-    $ $EDITOR ~/.bitcoin/bitcoin.conf
+    $ mkdir ~/.okcash
+    $ $EDITOR ~/.okcash/okcash.conf
 
-Write this in `bitcoin.conf`:
+Write this in `okcash.conf`:
 
     rpcuser=<rpc-username>
     rpcpassword=<rpc-password>
@@ -126,24 +126,24 @@ Write this in `bitcoin.conf`:
     txindex=1
 
 
-If you have an existing installation of bitcoind and have not previously
+If you have an existing installation of okcashd and have not previously
 set txindex=1 you need to reindex the blockchain by running
 
-    $ bitcoind -reindex
+    $ okcashd -reindex
 
-If you have a fresh copy of bitcoind start `bitcoind`:
+If you have a fresh copy of okcashd start `okcashd`:
 
-    $ bitcoind
+    $ okcashd
 
-Allow some time to pass for `bitcoind` to connect to the network and start
+Allow some time to pass for `okcashd` to connect to the network and start
 downloading blocks. You can check its progress by running:
 
-    $ bitcoind getinfo
+    $ okcashd getinfo
 
-Before starting the electrum server your bitcoind should have processed all 
+Before starting the electrum server your okcashd should have processed all 
 blockes and caught up to the current height of the network.
-You should also set up your system to automatically start bitcoind at boot
-time, running as the 'bitcoin' user. Check your system documentation to
+You should also set up your system to automatically start okcashd at boot
+time, running as the 'okcash' user. Check your system documentation to
 find out the best way to do this.
 
 ### Step 4. Download and install Electrum Server
@@ -269,7 +269,7 @@ in case you need to restore it.
 ### Step 9. Configure Electrum server
 
 Electrum reads a config file (/etc/electrum.conf) when starting up. This
-file includes the database setup, bitcoind RPC setup, and a few other
+file includes the database setup, okcashd RPC setup, and a few other
 options.
 
 The "configure" script listed above will create a config file at /etc/electrum.conf
@@ -285,17 +285,17 @@ file handles for each connection made to the server. It's good practice to incre
 open files limit to 64k. 
 
 The "configure" script will take care of this and ask you to create a user for running electrum-server.
-If you're using user bitcoin to run electrum and have added it manually like shown in this HOWTO run 
+If you're using user okcash to run electrum and have added it manually like shown in this HOWTO run 
 the following code to add the limits to your /etc/security/limits.conf:
 
-     echo "bitcoin hard nofile 65536" >> /etc/security/limits.conf
-     echo "bitcoin soft nofile 65536" >> /etc/security/limits.conf
+     echo "okcash hard nofile 65536" >> /etc/security/limits.conf
+     echo "okcash soft nofile 65536" >> /etc/security/limits.conf
 
 Two more things for you to consider:
 
-1. To increase security you may want to close bitcoind for incoming connections and connect outbound only
+1. To increase security you may want to close okcashd for incoming connections and connect outbound only
 
-2. Consider restarting bitcoind (together with electrum-server) on a weekly basis to clear out unconfirmed
+2. Consider restarting okcashd (together with electrum-server) on a weekly basis to clear out unconfirmed
    transactions from the local the memory pool which did not propagate over the network.
 
 ### Step 11. (Finally!) Run Electrum server
@@ -334,7 +334,7 @@ or hostname and the port. Press 'Ok' and the client will disconnect from the
 current server and connect to your new Electrum server. You should see your
 addresses and transactions history. You can see the number of blocks and
 response time in the Server selection window. You should send/receive some
-bitcoins to confirm that everything is working properly.
+okcashs to confirm that everything is working properly.
 
 ### Step 13. Join us on IRC, subscribe to the server thread
 
@@ -344,6 +344,6 @@ on supporting the community by running an Electrum node.
 
 If you're operating a public Electrum server please subscribe
 to or regulary check the following thread:
-https://bitcointalk.org/index.php?topic=85475.0
+https://okcashtalk.org/index.php?topic=85475.0
 It'll contain announcements about important updates to Electrum
 server required for a smooth user experience.

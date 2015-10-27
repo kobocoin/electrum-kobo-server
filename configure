@@ -107,16 +107,16 @@ if ! [ -f $logfile ]; then
 fi
 
 
-bitcoind_user=$(read_config "bitcoind_user")
-if ! [ "$bitcoind_user" ]; then
-    read -p "rpcuser (from your bitcoin.conf file): " -r
-    write_config "bitcoind_user" $REPLY
+okcashd_user=$(read_config "okcashd_user")
+if ! [ "$okcashd_user" ]; then
+    read -p "rpcuser (from your okcash.conf file): " -r
+    write_config "okcashd_user" $REPLY
 fi
 
-bitcoind_password=$(read_config "bitcoind_password")
-if ! [ "$bitcoind_password" ]; then
-    read -p "rpcpassword (from your bitcoin.conf file): " -r
-    write_config "bitcoind_password" $REPLY
+okcashd_password=$(read_config "okcashd_password")
+if ! [ "$okcashd_password" ]; then
+    read -p "rpcpassword (from your okcash.conf file): " -r
+    write_config "okcashd_password" $REPLY
 fi
 
 
