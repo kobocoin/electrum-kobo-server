@@ -2,22 +2,21 @@
 # username for running the daemon
 username = 
 # hostname. set it to a FQDN in order to be reached from outside
-host = 0.0.0.0
+host = localhost
 # ports
 electrum_rpc_port = 8036
 stratum_tcp_port = 5036
-#stratum_tcp_ssl_port = 50002
+#stratum_tcp_ssl_port = 5069
 #report_host = 
-#report_stratum_tcp_port = 50001
-#report_stratum_tcp_ssl_port = 50002
-#password = secret
-banner = Welcome to Electrum for OK!
-banner_file = /etc/electrum.banner
+#report_stratum_tcp_port = 5037
+#report_stratum_tcp_ssl_port = 5038
+banner = Welcome to Electrum-OK!
+banner_file = /etc/electrum-ok.banner
 #irc = no
 #irc_nick = <yournickname>
-#ssl_certfile = /path/to/electrum-server.crt
-#ssl_keyfile = /path/to/electrum-server.key
-logfile = /var/log/electrum.log
+#ssl_certfile = /path/to/server.crt
+#ssl_keyfile = /path/to/server.key
+logfile = /var/log/electrum-ok.log
 donation_address = 
 
 [leveldb]
@@ -26,9 +25,9 @@ path =
 # for each address, history will be pruned if it is longer than this limit
 pruning_limit = 100
 
-[okcashd]
-okcashd_host = 127.0.0.1
-okcashd_port = 6969
+[bitcoind]
+bitcoind_host = localhost
+bitcoind_port = 6969
 # user and password from okcash.conf
-okcashd_user = 
-okcashd_password = 
+bitcoind_user = 
+bitcoind_password = 

@@ -11,7 +11,7 @@ fi
 source_dir=$(cd "$(dirname "${BASH_SOURCE[0]}" )"; pwd)
 
 
-electrum_config="/etc/electrum.conf"
+electrum_config="/etc/electrum-ok.conf"
 function read_config()
 {
     text=$1
@@ -25,7 +25,7 @@ function write_config()
 # create config file
 if [ ! -f $electrum_config ]; then
     echo "Creating config file"
-    cp $source_dir"/electrum.conf.sample" $electrum_config
+    cp $source_dir"/electrum-ok.conf.sample" $electrum_config
 fi
 
 
@@ -52,7 +52,7 @@ fi
 
 
 # read path from config
-default_path="/var/electrum-server"
+default_path="/var/electrum-ok-server"
 path=$(read_config "path")
 if ! [ "$path" ]; then
     read -p "Path for database (default: $default_path) " -r
@@ -65,7 +65,7 @@ if ! [ "$path" ]; then
 fi
 
 # read path from config
-default_logfile="/var/log/electrum.log"
+default_logfile="/var/log/electrum-ok.log"
 logfile=$(read_config "logfile")
 if ! [ "$logfile" ]; then
     read -p "Path of logfile (default: $default_logfile) " -r
@@ -86,12 +86,12 @@ fi
 
 # download database
 if [ ! -d $path ]; then
-	mkdir -p $path
     echo "Database not found in $path."
     read -p "Do you want to download it from the Electrum foundry to $path ? " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-	wget -O - "http://okcash.co/electrum/electrum-fulltree-100-latest.tar.gz" | tar --extract --gunzip --strip-components 1 --directory $path --file -
+	mkdir -p $path
+	wget -O - "http://okcash.co/electrum/100-latest.tar.gz" | tar --extract --gunzip --strip-components 1 --directory $path --file -
     fi
 fi
 
@@ -103,20 +103,20 @@ chown -R $user:$user $path
 logfile=$(read_config "logfile")
 if ! [ -f $logfile ]; then
     touch $logfile
-    chown $user:$user $logfile
 fi
+chown $user:$user $logfile
 
 
-okcashd_user=$(read_config "okcashd_user")
-if ! [ "$okcashd_user" ]; then
+bitcoind_user=$(read_config "bitcoind_user")
+if ! [ "$bitcoind_user" ]; then
     read -p "rpcuser (from your okcash.conf file): " -r
-    write_config "okcashd_user" $REPLY
+    write_config "bitcoind_user" $REPLY
 fi
 
-okcashd_password=$(read_config "okcashd_password")
-if ! [ "$okcashd_password" ]; then
+bitcoind_password=$(read_config "bitcoind_password")
+if ! [ "$bitcoind_password" ]; then
     read -p "rpcpassword (from your okcash.conf file): " -r
-    write_config "okcashd_password" $REPLY
+    write_config "bitcoind_password" $REPLY
 fi
 
 
@@ -124,4 +124,4 @@ fi
 echo "Configuration written to $electrum_config."
 echo "Please edit this file to finish the configuration."
 echo "If you have not done so, please run 'python setup.py install'"
-echo "Then, run 'electrum-server' to start the daemon"
+echo "Then, run 'electrum-ok-server' to start the daemon"

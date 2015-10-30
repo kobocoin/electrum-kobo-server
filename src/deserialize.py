@@ -1,6 +1,5 @@
-# this code comes from ABE. it can probably be simplified
-#
-#
+# this code comes from ABE. it can probably be simplified 
+# harbinger of death 
 
 import mmap
 import string
@@ -16,7 +15,7 @@ class SerializationError(Exception):
 
 
 class BCDataStream(object):
-    """Workalike python implementation of OKcash's CDataStream class."""
+    """Workalike python implementation of Bitcoin's CDataStream class."""
     def __init__(self):
         self.input = None
         self.read_cursor = 0
@@ -46,7 +45,7 @@ class BCDataStream(object):
         # 0 to 252 :    1-byte-length followed by bytes (if any)
         # 253 to 65,535 : byte'253' 2-byte-length followed by bytes
         # 65,536 to 4,294,967,295 : byte '254' 4-byte-length followed by bytes
-        # ... and the OKcash client is coded to understand:
+        # ... and the Bitcoin client is coded to understand:
         # greater than 4,294,967,295 : byte '255' 8-byte-length followed by bytes of string
         # ... but I don't think it actually handles any strings that big.
         if self.input is None:
@@ -244,7 +243,7 @@ def parse_Transaction(vds, is_coinbase):
     d = {}
     start = vds.read_cursor
     d['version'] = vds.read_int32()
-    d['time'] = vds.read_int32()
+    d['nTime'] = vds.read_uint32()
     n_vin = vds.read_compact_size()
     d['inputs'] = []
     for i in xrange(n_vin):
@@ -267,7 +266,7 @@ def parse_Transaction(vds, is_coinbase):
 
 
 opcodes = Enumeration("Opcodes", [
-    ("OP_0", 0), ("OP_PUSHDATA1", 76), "OP_PUSHDATA2", "OP_PUSHDATA4", "OP_1NEGATE", "OP_RESERVED",
+    ("OP_0", 0x00), ("OP_PUSHDATA1", 0x4c), ("OP_PUSHDATA2", 0x4d), ("OP_PUSHDATA4", 0x4e), ("OP_1NEGATE", 0x4f), ("OP_RESERVED", 0x50),
     "OP_1", "OP_2", "OP_3", "OP_4", "OP_5", "OP_6", "OP_7",
     "OP_8", "OP_9", "OP_10", "OP_11", "OP_12", "OP_13", "OP_14", "OP_15", "OP_16",
     "OP_NOP", "OP_VER", "OP_IF", "OP_NOTIF", "OP_VERIF", "OP_VERNOTIF", "OP_ELSE", "OP_ENDIF", "OP_VERIFY",
@@ -283,7 +282,7 @@ opcodes = Enumeration("Opcodes", [
     "OP_HASH256", "OP_CODESEPARATOR", "OP_CHECKSIG", "OP_CHECKSIGVERIFY", "OP_CHECKMULTISIG",
     "OP_CHECKMULTISIGVERIFY",
     "OP_NOP1", "OP_NOP2", "OP_NOP3", "OP_NOP4", "OP_NOP5", "OP_NOP6", "OP_NOP7", "OP_NOP8", "OP_NOP9", "OP_NOP10",
-    ("OP_INVALIDOPCODE", 0xFF),
+    ("OP_INVALIDOPCODE", 0xff),
 ])
 
 
@@ -407,7 +406,7 @@ def get_address_from_output_script(bytes):
     if match_decoded(decoded, match):
         return None
 
-    # Pay-by-OKcash-address TxOuts look like:
+    # Pay-by-Bitcoin-address TxOuts look like:
     # DUP HASH160 20 BYTES:... EQUALVERIFY CHECKSIG
     match = [opcodes.OP_DUP, opcodes.OP_HASH160, opcodes.OP_PUSHDATA4, opcodes.OP_EQUALVERIFY, opcodes.OP_CHECKSIG]
     if match_decoded(decoded, match):

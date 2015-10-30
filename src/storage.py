@@ -66,7 +66,7 @@ class Storage(object):
         print_log("UTXO tree root hash:", self.root_hash.encode('hex'))
         print_log("Coins in database:", v)
 
-    # convert between okcash addresses and 20 bytes keys used for storage. 
+    # convert between bitcoin addresses and 20 bytes keys used for storage. 
     def address_to_key(self, addr):
         return bc_address_to_hash_160(addr)
 
@@ -161,8 +161,8 @@ class Storage(object):
         return eval(s)
 
 
-    def write_undo_info(self, height, okcashd_height, undo_info):
-        if height > okcashd_height - 100 or self.test_reorgs:
+    def write_undo_info(self, height, bitcoind_height, undo_info):
+        if height > bitcoind_height - 100 or self.test_reorgs:
             self.db_undo.put("undo_info_%d" % (height % 100), repr(undo_info))
 
 

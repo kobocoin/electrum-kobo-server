@@ -1,30 +1,32 @@
 from setuptools import setup
 
 setup(
-    name="electrum-server",
+    name="electrum-ok-server",
     version="0.9",
-    scripts=['run_electrum_server','electrum-server','configure','electrum.conf.sample'],
-    install_requires=['plyvel','jsonrpclib', 'irc'],
-    package_dir={'electrum_server':'src'},
+    scripts=['run_electrum_ok_server','electrum-ok-server'],
+    install_requires=['plyvel','jsonrpclib', 'irc>=11'],
+    package_dir={
+        'electrumokserver':'src'
+        },
     py_modules=[
-        'electrum_server.__init__',
-        'electrum_server.utils',
-        'electrum_server.storage',
-        'electrum_server.deserialize',
-        'electrum_server.networks',
-        'electrum_server.blockchain_processor',
-        'electrum_server.server_processor',
-        'electrum_server.processor',
-        'electrum_server.version',
-        'electrum_server.ircthread',
-        'electrum_server.stratum_tcp',
-        'electrum_server.stratum_http'
+        'electrumokserver.__init__',
+        'electrumokserver.utils',
+        'electrumokserver.storage',
+        'electrumokserver.deserialize',
+        'electrumokserver.networks',
+        'electrumokserver.blockchain_processor',
+        'electrumokserver.server_processor',
+        'electrumokserver.processor',
+        'electrumokserver.version',
+        'electrumokserver.ircthread',
+        'electrumokserver.stratum_tcp',
+        'electrumokserver.stratum_http'
     ],
     description="OKCash Electrum Server",
-    author="Thomas Voegtlin, OKtoshi",
+    author="Thomas V, OKtoshi",
     author_email="thomasv1@gmx.de",
     license="GNU Affero GPLv3",
-    url="https://github.com/oktoshi/electrum-server/",
+    url="https://github.com/okcashpro/electrum-ok-server/",
     long_description="""Server for the Electrum Lightweight OKCash Wallet"""
 )
 

@@ -12,7 +12,7 @@ requirements.
 
 The most up-to date version of this document is available at:
 
-    https://github.com/spesmilo/electrum-server/blob/master/HOWTO.md
+    https://github.com/okcashpro/electrum-ok-server/blob/master/HOWTO.md
 
 Conventions
 -----------
@@ -50,15 +50,15 @@ issue so you can continue following this howto.
 **Software.** A recent Linux 64-bit distribution with the following software
 installed: `python`, `easy_install`, `git`, standard C/C++
 build chain. You will need root access in order to install other software or
-Python libraries. 
+Python libraries. Python 2.7 is the minimum supported version.
 
 **Hardware.** The lightest setup is a pruning server with diskspace 
-requirements of about 10 GB for the electrum database. However note that 
+requirements of about 4 GB for the electrum database. However note that 
 you also need to run okcashd and keep a copy of the full blockchain, 
-which is roughly 20 GB in April 2014. If you have less than 2 GB of RAM 
+which is roughly 600 MB in October 2015. If you have less than 2 GB of RAM 
 make sure you limit okcashd to 8 concurrent connections. If you have more 
-resources to spare you can run the server with a higher limit of historic 
-transactions per address. CPU speed is important for the initial block 
+resources to spare you can run the server with a higher limit of historic
+transactions per address. CPU speed is important for the initial block
 chain import, but is also important if you plan to run a public Electrum server, 
 which could serve tens of concurrent requests. Any multi-core x86 CPU from 2009 or
 newer other than an Atom should do for good performance. An ideal setup
@@ -89,25 +89,17 @@ to your `.bashrc`, `.profile`, or `.bash_profile`, then logout and relogin:
 
 ### Step 2. Download okcashd
 
-Older versions of Electrum used to require a patched version of okcashd. 
-This is not the case anymore since okcashd supports the 'txindex' option.
-We currently recommend okcashd 0.9.3 stable.
+We currently recommend okcashd v3.0.0.0
 
-If your package manager does not supply a recent okcashd or you prefer to compile it yourself,
-here are some pointers for Ubuntu:
+If you prefer to compile okcashd, here are some pointers for Ubuntu:
 
-    $ sudo apt-get install make g++ python-leveldb libboost-all-dev libssl-dev libdb++-dev pkg-config
+    $ sudo apt-get install make g++ python-leveldb libboost-all-dev libssl-dev libdb++-dev pkg-config automake libtool
     $ sudo su - okcash
-    $ cd ~/src && wget https://okcash.org/bin/0.9.3/okcash-0.9.3-linux.tar.gz
-    $ sha256sum okcash-0.9.3-linux.tar.gz | grep c425783b6cbab9b801ad6a1dcc9235828b98e5dee6675112741f8b210e4f65cd
-    $ tar xfz okcash-0.9.3-linux.tar.gz
-    $ cd okcash-0.9.3-linux/src
-    $ tar xfz okcash-0.9.3.tar.gz
-    $ cd okcash-0.9.3
-    $ ./configure --disable-wallet --without-miniupnpc
-    $ make
-    $ strip ~/src/okcash-0.9.3-linux/src/okcash-0.9.3/src/okcashd
-    $ cp -a ~/src/okcash-0.9.3-linux/src/okcash-0.9.3/src/okcashd ~/bin/okcashd
+    $ cd ~/src && git clone https://github.com/okcashpro/okcash.git 
+    $ cd okcash/src
+    $ make -f makefile.unix
+    $ strip okcashd src
+    $ cp -a okcashd src ~/bin
 
 ### Step 3. Configure and start okcashd
 
@@ -124,24 +116,25 @@ Write this in `okcash.conf`:
     rpcpassword=<rpc-password>
     daemon=1
     txindex=1
+    disablewallet=1
 
 
 If you have an existing installation of okcashd and have not previously
 set txindex=1 you need to reindex the blockchain by running
 
-    $ okcashd -reindex
+    $ ./okcashd -reindex
 
-If you have a fresh copy of okcashd start `okcashd`:
+If you already have a freshly indexed copy of the blockchain with txindex start `okcashd`:
 
-    $ okcashd
+    $ ./okcashd
 
-Allow some time to pass for `okcashd` to connect to the network and start
+Allow some time to pass, so `okcashd` connects to the network and starts
 downloading blocks. You can check its progress by running:
 
-    $ okcashd getinfo
+    $ ./okcashd getinfo
 
-Before starting the electrum server your okcashd should have processed all 
-blockes and caught up to the current height of the network.
+Before starting the electrum server your okcashd should have processed all
+blocks and caught up to the current height of the network (not just the headers).
 You should also set up your system to automatically start okcashd at boot
 time, running as the 'okcash' user. Check your system documentation to
 find out the best way to do this.
@@ -151,8 +144,8 @@ find out the best way to do this.
 We will download the latest git snapshot for Electrum to configure and install it:
 
     $ cd ~
-    $ git clone https://github.com/spesmilo/electrum-server.git
-    $ cd electrum-server
+    $ git clone https://github.com/okcashpro/electrum-ok-server.git
+    $ cd electrum-ok-server
     $ sudo configure
     $ sudo python setup.py install
 
@@ -199,13 +192,13 @@ It's recommended to fetch a pre-processed leveldb from the net.
 The "configure" script above will offer you to download a database with pruning limit 100.
 
 You can fetch recent copies of electrum leveldb databases with differnt pruning limits 
-and further instructions from the Electrum full archival server foundry at:
-http://foundry.electrum.org/
+and further instructions from the Electrum-OK full archival server foundry at:
+http://okcash.co/electrum/
 
 
 Alternatively, if you have the time and nerve, you can import the blockchain yourself.
 
-As of April 2014 it takes between two days and over a week to import 300k blocks, depending
+As of October 2015 it takes between one and two days to import 500k blocks, depending
 on CPU speed, I/O speed, and your selected pruning limit.
 
 It's considerably faster and strongly recommended to index in memory. You can use /dev/shm or
@@ -213,15 +206,15 @@ or create a tmpfs which will also use swap if you run out of memory:
 
     $ sudo mount -t tmpfs -o rw,nodev,nosuid,noatime,size=15000M,mode=0777 none /tmpfs
 
-If you use tmpfs make sure you have enough RAM and swap to cover the size. If you only have 4 gigs of
+If you use tmpfs make sure you have enough RAM and swap to cover the size. If you only have 2 gigs of
 RAM but add 15 gigs of swap from a file that's fine too. tmpfs is rather smart to swap out the least
-used parts. It's fine to use a file on an SSD for swap in this case. 
+used parts. It's fine to use a file on an SSD for swap in this case.
 
-It's not recommended to do initial indexing of the database on an SSD because the indexing process
-does at least 20 TB (!) of disk writes and puts considerable wear-and-tear on an SSD. It's a lot better
-to use tmpfs and just swap out to disk when necessary.
+It's not recommended to do initial indexing of the database on a SSD because the indexing process
+does at least 10 TB (!) of disk writes and puts considerable wear-and-tear on an SSD. It's a lot better
+to use tmpfs and just swap out to disk when necessary.   
 
-Databases have grown to roughly 8 GB in April 2014, give or take a gigabyte between pruning limits 
+Databases have grown to roughly 600 Mb in October 2015, give or take a gigabyte between pruning limits 
 100 and 10000. Leveldb prunes the database from time to time, so it's not uncommon to see databases
 ~50% larger at times when it's writing a lot, especially when indexing from the beginning.
 
@@ -231,7 +224,7 @@ Databases have grown to roughly 8 GB in April 2014, give or take a gigabyte betw
 [Note: SSL certificates signed by a CA are supported by 2.0 clients.]
 
 To run SSL / HTTPS you need to generate a self-signed certificateusing openssl. 
-You could just comment out the SSL / HTTPS ports in the config and run 
+You could just comment out the SSL / HTTPS ports in the config and run
 without, but this is not recommended.
 
 Use the sample code below to create a self-signed cert with a recommended validity 
@@ -268,11 +261,11 @@ in case you need to restore it.
 
 ### Step 9. Configure Electrum server
 
-Electrum reads a config file (/etc/electrum.conf) when starting up. This
+Electrum reads a config file (/etc/electrum-ok.conf) when starting up. This
 file includes the database setup, okcashd RPC setup, and a few other
 options.
 
-The "configure" script listed above will create a config file at /etc/electrum.conf
+The "configure" script listed above will create a config file at /etc/electrum-ok.conf
 which you can edit to modify the settings.
 
 Go through the config options and set them to your liking.
@@ -284,7 +277,7 @@ Electrum server currently needs quite a few file handles to use leveldb. It also
 file handles for each connection made to the server. It's good practice to increase the
 open files limit to 64k. 
 
-The "configure" script will take care of this and ask you to create a user for running electrum-server.
+The "configure" script will take care of this and ask you to create a user for running electrum-ok-server.
 If you're using user okcash to run electrum and have added it manually like shown in this HOWTO run 
 the following code to add the limits to your /etc/security/limits.conf:
 
@@ -295,16 +288,16 @@ Two more things for you to consider:
 
 1. To increase security you may want to close okcashd for incoming connections and connect outbound only
 
-2. Consider restarting okcashd (together with electrum-server) on a weekly basis to clear out unconfirmed
+2. Consider restarting okcashd (together with electrum-ok-server) on a weekly basis to clear out unconfirmed
    transactions from the local the memory pool which did not propagate over the network.
 
 ### Step 11. (Finally!) Run Electrum server
 
 The magic moment has come: you can now start your Electrum server as root (it will su to your unprivileged user):
 
-    # electrum-server start
+    # electrum-ok-server start
 
-Note: If you want to run the server without installing it on your system, just run 'run_electrum_server" as the
+Note: If you want to run the server without installing it on your system, just run 'run_electrum_ok_server" as the
 unprivileged user.
 
 You should see this in the log file:
@@ -313,15 +306,15 @@ You should see this in the log file:
 
 If you want to stop Electrum server, use the 'stop' command:
 
-    # electrum-server stop
+    # electrum-ok-server stop
 
 
-If your system supports it, you may add electrum-server to the /etc/init.d directory. 
+If your system supports it, you may add electrum-ok-server to the /etc/init.d directory. 
 This will ensure that the server is started and stopped automatically, and that the database is closed 
 safely whenever your machine is rebooted.
 
-    # ln -s `which electrum-server` /etc/init.d/electrum-server
-    # update-rc.d electrum-server defaults
+    # ln -s `which electrum-ok-server` /etc/init.d/electrum-ok-server
+    # update-rc.d electrum-ok-server defaults
 
 ### Step 12. Test the Electrum server
 
@@ -334,16 +327,14 @@ or hostname and the port. Press 'Ok' and the client will disconnect from the
 current server and connect to your new Electrum server. You should see your
 addresses and transactions history. You can see the number of blocks and
 response time in the Server selection window. You should send/receive some
-okcashs to confirm that everything is working properly.
+$OK's to confirm that everything is working properly.
 
 ### Step 13. Join us on IRC, subscribe to the server thread
 
-Say hi to the dev crew, other server operators, and fans on 
-irc.freenode.net #electrum and we'll try to congratulate you
-on supporting the community by running an Electrum node.
+Say hi to the dev crew, other server operators, and fans on
+irc.freenode.net #okcash and we'll try to congratulate you
+on supporting the community by running an Electrum-OK node.
 
-If you're operating a public Electrum server please subscribe
-to or regulary check the following thread:
-https://okcashtalk.org/index.php?topic=85475.0
-It'll contain announcements about important updates to Electrum
-server required for a smooth user experience.
+If you're operating a public Electrum-OK server please share the announce at:
+https://bitcointalk.org/index.php?topic=1028368.0
+It contain announcements about important updates to OKCash.

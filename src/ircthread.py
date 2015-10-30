@@ -40,7 +40,7 @@ class IrcThread(threading.Thread):
             self.nick = Hash(self.host)[:5].encode("hex")
         self.pruning = True
         self.pruning_limit = config.get('leveldb', 'pruning_limit')
-        self.nick = 'E_' + self.nick
+        self.nick = 'EL_' + self.nick
         self.password = None
 
     def getname(self):
@@ -67,20 +67,20 @@ class IrcThread(threading.Thread):
         threading.Thread.start(self)
  
     def on_connect(self, connection, event):
-        connection.join("#electrum")
+        connection.join("#okcash")
 
     def on_join(self, connection, event):
-        m = re.match("(E_.*)!", event.source)
+        m = re.match("(EL_.*)!", event.source)
         if m:
             connection.who(m.group(1))
 
     def on_quit(self, connection, event):
-        m = re.match("(E_.*)!", event.source)
+        m = re.match("(EL_.*)!", event.source)
         if m:
             self.queue.put(('quit', [m.group(1)]))
         
     def on_kick(self, connection, event):
-        m = re.match("(E_.*)", event.arguments[0])
+        m = re.match("(EL_.*)", event.arguments[0])
         if m:
             self.queue.put(('quit', [m.group(1)]))
 
@@ -93,7 +93,7 @@ class IrcThread(threading.Thread):
         try:
             ip = socket.gethostbyname(line[1])
         except:
-            logger.error("gethostbyname error" + line[1])
+            logger.error("gethostbyname error " + line[1])
             return
         nick = event.arguments[4]
         host = line[1]
@@ -102,7 +102,7 @@ class IrcThread(threading.Thread):
 
     def on_name(self, connection, event):
         for s in event.arguments[2].split():
-            if s.startswith("E_"):
+            if s.startswith("EL_"):
                 connection.who(s)
 
     def run(self):
@@ -110,10 +110,12 @@ class IrcThread(threading.Thread):
             time.sleep(1)
 
         self.ircname = self.host + ' ' + self.getname()
+        # avoid UnicodeDecodeError using LenientDecodingLineBuffer
+        irc.client.ServerConnection.buffer_class = irc.buffer.LenientDecodingLineBuffer
         logger.info("joining IRC")
 
         while not self.processor.shared.stopped():
-            client = irc.client.IRC()
+            client = irc.client.Reactor()
             try:
                 c = client.server().connect('irc.freenode.net', 6667, self.nick, self.password, ircname=self.ircname)
             except irc.client.ServerConnectionError:

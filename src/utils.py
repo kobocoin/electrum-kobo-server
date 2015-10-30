@@ -52,6 +52,7 @@ def var_int(i):
 
 
 Hash = lambda x: hashlib.sha256(hashlib.sha256(x).digest()).digest()
+
 HashScrypt = lambda x: scrypt.hash(x, x, 1024, 1, 1, 32)
 
 hash_encode = lambda x: x[::-1].encode('hex')
@@ -158,7 +159,7 @@ def b58encode(v):
         long_value = div
     result = __b58chars[long_value] + result
 
-    # OKCash does a little leading-zero-compression:
+    # Bitcoin does a little leading-zero-compression:
     # leading 0-bytes in the input become leading-1s
     nPad = 0
     for c in v:
@@ -231,7 +232,7 @@ def timestr():
 import logging
 import logging.handlers
 
-logger = logging.getLogger('electrum')
+logger = logging.getLogger('electrum-ok')
 
 def init_logger(logfile):
     hdlr = logging.handlers.WatchedFileHandler(logfile)
