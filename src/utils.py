@@ -15,6 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 from itertools import imap
 import threading
 import time
@@ -128,7 +129,7 @@ def hash_160_to_script_address(h160):
     return hash_160_to_address(h160, SCRIPT_ADDRESS)
 
 
-def hash_160_to_address(h160, addrtype = 55):
+def hash_160_to_address(h160, addrtype = 48):
     """ Checks if the provided hash is actually 160bits or 20 bytes long and returns the address, else None
     """
     if h160 is None or len(h160) is not 20:
@@ -218,10 +219,10 @@ def DecodeBase58Check(psz):
 
 
 ########### end pywallet functions #######################
+import os
 
 def random_string(length):
-    with open("/dev/urandom", 'rb') as f:
-        return b58encode( f.read(length) )
+    return b58encode(os.urandom(length))
 
 def timestr():
     return time.strftime("[%d/%m/%Y-%H:%M:%S]")
@@ -247,6 +248,3 @@ def print_log(*args):
 
 def print_warning(message):
     logger.warning(message)
-
-
-

@@ -101,25 +101,30 @@ class BlockchainProcessor(Processor):
             s += k+':'+"%.2f"%v+' '
         print_log(s)
 
+    def wait_on_bitcoind(self):
+        self.shared.pause()
+        time.sleep(10)
+        if self.shared.stopped():
+            # this will end the thread
+            raise
 
     def bitcoind(self, method, params=[]):
         postdata = dumps({"method": method, 'params': params, 'id': 'jsonrpc'})
         while True:
             try:
                 respdata = urllib.urlopen(self.bitcoind_url, postdata).read()
-                break
             except:
                 print_log("cannot reach okcashd...")
-                self.shared.pause()
-                time.sleep(10)
-                if self.shared.stopped():
-                    # this will end the thread
-                    raise
-                continue
-
-        r = loads(respdata)
-        if r['error'] is not None:
-            raise BaseException(r['error'])
+                self.wait_on_bitcoind()
+            else:
+                r = loads(respdata)
+                if r['error'] is not None:
+                    if r['error'].get('code') == -28:
+                        print_log("okcashd still warming up...")
+                        self.wait_on_bitcoind()
+                        continue
+                    raise BaseException(r['error'])
+                break
         return r.get('result')
 
 
@@ -277,6 +282,12 @@ class BlockchainProcessor(Processor):
             self.history_cache[addr] = hist
         return hist
 
+    def get_unconfirmed_history(self, addr):
+        hist = []
+        with self.mempool_lock:
+            for txid, delta in self.mempool_hist.get(addr, []):
+                hist.append({'tx_hash':txid, 'height':0})
+        return hist
 
     def get_unconfirmed_value(self, addr):
         v = 0
@@ -497,7 +508,7 @@ class BlockchainProcessor(Processor):
 
         elif method == 'blockchain.address.get_mempool':
             address = str(params[0])
-            result = self.get_unconfirmed_history(address, cache_only)
+            result = self.get_unconfirmed_history(address)
 
         elif method == 'blockchain.address.get_balance':
             address = str(params[0])
@@ -581,10 +592,6 @@ class BlockchainProcessor(Processor):
             i += 1
 
         postdata = dumps(rawtxreq)
-
-        print "postdata!!"
-        print postdata
-
         try:
             respdata = urllib.urlopen(self.bitcoind_url, postdata).read()
         except:
@@ -771,7 +778,7 @@ class BlockchainProcessor(Processor):
     def invalidate_cache(self, address):
         with self.cache_lock:
             if address in self.history_cache:
-                print_log("cache: invalidating", address)
+                # print_log("cache: invalidating", address)
                 self.history_cache.pop(address)
 
         with self.watch_lock:

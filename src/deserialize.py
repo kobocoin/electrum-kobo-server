@@ -1,5 +1,5 @@
-# this code comes from ABE. it can probably be simplified 
-# harbinger of death 
+# this code comes from ABE. it can probably be simplified
+# harbinger of death
 
 import mmap
 import string

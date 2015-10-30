@@ -17,7 +17,7 @@ class UtilTest(unittest.TestCase):
     def test_bc_address_to_hash_160(self):
         self.assertEqual(bc_address_to_hash_160(None), None)
         self.assertEqual(bc_address_to_hash_160(''), None)
-        self.assertEqual(bc_address_to_hash_160('13SrAVFPVW1txSj34B8Bd6hnDbyPsVGa921337'), None)
+        self.assertEqual(bc_address_to_hash_160('13SrAVFPVW1txSj34B8Bd6hnDbyPsVGa92'), None)
         self.assertEqual(bc_address_to_hash_160('13SrAVFPVW1txSj34B8Bd6hnDbyPsVGa92').encode('hex'),
                                                 '1ad3b0b711f211655a01142fbb8fecabe8e30b93')
 
