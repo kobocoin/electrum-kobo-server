@@ -159,6 +159,7 @@ package manager if you don't want to use the install routine
 
     $ sudo apt-get install python-setuptools python-openssl python-leveldb libleveldb-dev 
     $ sudo easy_install jsonrpclib irc plyvel
+	$ chmod g-wx,o-wx ~/.python-eggs
 
 Regarding leveldb see the steps in README.leveldb for further details, especially if your system
 doesn't have the python-leveldb package or if plyvel installation fails.
