@@ -1,4 +1,4 @@
-![Electrum-OK](i.imgur.com/rOeEycy.png)
+![Electrum-OK](http://i.imgur.com/rOeEycy.png)
 electrum-ok-server
 =========================================
   * Language: Python
