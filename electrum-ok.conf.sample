@@ -4,12 +4,12 @@ username =
 # hostname. set it to a FQDN in order to be reached from outside
 host = localhost
 # ports
-electrum_rpc_port = 8036
-stratum_tcp_port = 5036
-#stratum_tcp_ssl_port = 5069
+electrum_rpc_port = 8040
+stratum_tcp_port = 5040
+#stratum_tcp_ssl_port = 5042
 #report_host = 
-#report_stratum_tcp_port = 5037
-#report_stratum_tcp_ssl_port = 5038
+#report_stratum_tcp_port = 5043
+#report_stratum_tcp_ssl_port = 5044
 banner = Welcome to Electrum-OK!
 banner_file = /etc/electrum-ok.banner
 #irc = no
