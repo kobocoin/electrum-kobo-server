@@ -2,7 +2,7 @@
 electrum-ok-server
 =========================================
   * Language: Python
-  * Authors: ThomasV (original ltc fork) oktoshi (okcash fork)
+  * Authors: ThomasV (creator) oktoshi (okcash fork)
 
 Features
 --------
