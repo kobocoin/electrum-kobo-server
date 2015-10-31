@@ -8,12 +8,15 @@ import sys
 import time
 import threading
 import urllib
+from collections import OrderedDict
 
 import deserialize
 from processor import Processor, print_log
 from utils import *
 from storage import Storage
 from utils import logger
+
+block_cache_size = 50
 
 class BlockchainProcessor(Processor):
 
@@ -29,6 +32,8 @@ class BlockchainProcessor(Processor):
         self.watch_blocks = []
         self.watch_headers = []
         self.watched_addresses = {}
+
+        self.block_cache = OrderedDict()
 
         self.history_cache = {}
         self.max_cache_size = 100000
@@ -579,6 +584,9 @@ class BlockchainProcessor(Processor):
 
 
     def getfullblock(self, block_hash):
+        cached_block = self.block_cache.get(block_hash, None)
+        if cached_block is not None:
+            return cached_block
         block = self.bitcoind('getblock', [block_hash])
 
         rawtxreq = []
@@ -607,6 +615,13 @@ class BlockchainProcessor(Processor):
                 raise BaseException(ir['error'])
             rawtxdata.append(ir['result'])
         block['tx'] = rawtxdata
+
+        # add to cache
+        if self.bitcoind_height - self.storage.height < block_cache_size:
+            self.block_cache[block_hash] = block
+        # pop the oldest block if necessary
+        if len(self.block_cache) > block_cache_size:
+            self.block_cache.popitem(False)
         return block
 
     def catch_up(self, sync=True):
