@@ -49,7 +49,7 @@ class IrcThread(threading.Thread):
             s += 'p' + self.pruning_limit + ' '
 
         def add_port(letter, number):
-            DEFAULT_PORTS = {'t':'50001', 's':'50002', 'h':'8081', 'g':'8082'}
+            DEFAULT_PORTS = {'t':'5040', 's':'5042', 'h':'8081', 'g':'8082'}
             if not number: return ''
             if DEFAULT_PORTS[letter] == number:
                 return letter + ' '
