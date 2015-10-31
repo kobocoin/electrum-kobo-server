@@ -1,5 +1,5 @@
-![Electrum-OK](http://i.imgur.com/rOeEycy.png)
-electrum-ok-server
+![Electrum-OK](http://i.imgur.com/QWQR83S.png)
+Electrum OK Server
 =========================================
   * Language: Python
   * Authors: ThomasV (creator) oktoshi (okcash fork)
