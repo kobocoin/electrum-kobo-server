@@ -303,13 +303,19 @@ class Storage(object):
 
                 node_hash, node_value = self.hash_list.pop(node)
 
-                # for each node, compute its hash, send it to the parent
+                parent = self.parents[node] if node!='' else ''
+
+                if i != KEYLENGTH and node_hash is None:
+                    n = self.get_node(node)
+                    node_hash, node_value = n.get_hash(node, parent)
+                assert node_hash is not None
+				
                 if node == '':
                     self.root_hash = node_hash
                     self.root_value = node_value
+                    assert self.root_hash is not None
                     break
 
-                parent = self.parents[node]
 
                 # read parent.. do this in add_address
                 d = nodes.get(parent)
@@ -320,11 +326,6 @@ class Storage(object):
                 letter = node[len(parent)]
                 assert letter in d.keys()
 
-                if i != KEYLENGTH and node_hash is None:
-                    d2 = self.get_node(node)
-                    node_hash, node_value = self.get_node_hash(node, d2, parent)
-
-                assert node_hash is not None
                 # write new value
                 d[letter] = (node_hash, node_value)
                 nodes[parent] = d
