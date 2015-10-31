@@ -624,7 +624,8 @@ class BlockchainProcessor(Processor):
                 self.up_to_date = True
                 break
 
-            revert = (random.randint(1, 100) == 1) if self.test_reorgs and self.storage.height>100 else False
+            # fixme: this is unsafe, if we revert when the undo info is not yet written
+            revert = (random.randint(1, 100) == 1) if self.test_reorgs else False
 
             # not done..
             self.up_to_date = False
