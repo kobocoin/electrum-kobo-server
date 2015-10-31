@@ -2,7 +2,7 @@
 Electrum OK Server
 =========================================
   * Language: Python
-  * Authors: ThomasV (creator) oktoshi (okcash fork)
+  * Authors: ThomasV (orig.btc) oktoshi (mod.ok)
 
 Features
 --------
