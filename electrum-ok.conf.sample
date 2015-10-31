@@ -23,10 +23,10 @@ donation_address =
 # path to your database
 path = 
 # for each address, history will be pruned if it is longer than this limit
-pruning_limit = 100
+pruning_limit = 1000
 
 [bitcoind]
-bitcoind_host = localhost
+bitcoind_host = 127.0.0.1
 bitcoind_port = 6969
 # user and password from okcash.conf
 bitcoind_user = 
