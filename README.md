@@ -2,7 +2,7 @@
 Electrum Kobocoin Server
 =========================================
   * Language: Python
-  * Authors: ThomasV (orig.btc) oktoshi (mod.ok) TheTribesman (mod)
+  * Authors: ThomasV (orig.btc) oktoshi (mod.ok) Felix Ugoji (mod.kobo)
 
 Features
 --------
