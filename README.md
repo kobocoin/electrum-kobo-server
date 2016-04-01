@@ -1,5 +1,5 @@
 ![Electrum-OK](http://kobocoin.com/kobocoin.png)
-Electrum OK Server
+Electrum Kobocoin Server
 =========================================
   * Language: Python
   * Authors: ThomasV (orig.btc) oktoshi (mod.ok) TheTribesman (mod)
