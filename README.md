@@ -1,8 +1,8 @@
-![Electrum-OK](http://i.imgur.com/QWQR83S.png)
+![Electrum-OK](http://kobocoin.com/kobocoin.png)
 Electrum OK Server
 =========================================
   * Language: Python
-  * Authors: ThomasV (orig.btc) oktoshi (mod.ok)
+  * Authors: ThomasV (orig.btc) oktoshi (mod.ok) TheTribesman (mod)
 
 Features
 --------
