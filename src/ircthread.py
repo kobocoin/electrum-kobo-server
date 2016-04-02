@@ -67,7 +67,7 @@ class IrcThread(threading.Thread):
         threading.Thread.start(self)
  
     def on_connect(self, connection, event):
-        connection.join("#okcash")
+        connection.join("#kobocoin")
 
     def on_join(self, connection, event):
         m = re.match("(EL_.*)!", event.source)
