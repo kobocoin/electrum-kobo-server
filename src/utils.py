@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight OKCash client
+# Electrum - lightweight Kobocoin client
 # Copyright (C) 2011 thomasv@gitorious
 #
 # This program is free software: you can redistribute it and/or modify
@@ -233,7 +233,7 @@ def timestr():
 import logging
 import logging.handlers
 
-logger = logging.getLogger('electrum-ok')
+logger = logging.getLogger('electrum-kobo')
 
 def init_logger(logfile):
     hdlr = logging.handlers.WatchedFileHandler(logfile)
