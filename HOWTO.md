@@ -94,7 +94,7 @@ We currently recommend Kobocoind v2.1.0.3
 If you prefer to compile Kobocoind, here are some pointers for Ubuntu:
 
     $ sudo apt-get install make g++ python-leveldb libboost-all-dev libssl-dev libdb++-dev pkg-config automake libtool
-    $ sudo su - okcash
+    $ sudo su - kobocoin
     $ cd ~/src && git clone https://bitbucket.org/TheTribesman/kobocoin.git 
     $ cd Kobocoin/src
     $ make -f makefile.unix
