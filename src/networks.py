@@ -9,6 +9,6 @@ params = {
     'Kobocoin_test': {
         'pubkey_address': 111,
         'script_address': 196,
-        'genesis_hash': '0000e3283629707a14a6c5f3297995095ac0e337b2af9bca1358d4788ed86169'
+        'genesis_hash': '0000d20b7549d1457039ebc7d0c8ea5f6d6c8c2c811f898d5530bfeb70fcb06f'
     }
 }
