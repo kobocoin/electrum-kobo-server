@@ -1,33 +1,33 @@
 from setuptools import setup
 
 setup(
-    name="electrum-ok-server",
+    name="electrum-kobo-server",
     version="1.1",
-    scripts=['run_electrum_ok_server','electrum-ok-server'],
+    scripts=['run_electrum_kobo_server','electrum-kobo-server'],
     install_requires=['plyvel','jsonrpclib', 'irc>=11'],
     package_dir={
-        'electrumokserver':'src'
+        'electrumkoboserver':'src'
         },
     py_modules=[
-        'electrumokserver.__init__',
-        'electrumokserver.utils',
-        'electrumokserver.storage',
-        'electrumokserver.deserialize',
-        'electrumokserver.networks',
-        'electrumokserver.blockchain_processor',
-        'electrumokserver.server_processor',
-        'electrumokserver.processor',
-        'electrumokserver.version',
-        'electrumokserver.ircthread',
-        'electrumokserver.stratum_tcp',
-        'electrumokserver.stratum_http'
+        'electrumkoboserver.__init__',
+        'electrumkoboserver.utils',
+        'electrumkoboserver.storage',
+        'electrumkoboserver.deserialize',
+        'electrumkoboserver.networks',
+        'electrumkoboserver.blockchain_processor',
+        'electrumkoboserver.server_processor',
+        'electrumkoboserver.processor',
+        'electrumkoboserver.version',
+        'electrumkoboserver.ircthread',
+        'electrumkoboserver.stratum_tcp',
+        'electrumkoboserver.stratum_http'
     ],
-    description="OKCash Electrum Server",
-    author="Thomas V, OKtoshi",
-    author_email="thomasv1@gmx.de",
+    description="Kobocoin Electrum Server",
+    author="Felix Ugoji",
+    author_email="dev@kobocoin.com",
     license="GNU Affero GPLv3",
-    url="https://github.com/okcashpro/electrum-ok-server/",
-    long_description="""Server for the Electrum Lightweight OKCash Wallet"""
+    url="https://github.com/kobocoin/electrum-kobo-server/",
+    long_description="""Server for the Electrum Lightweight Kobocoin Wallet"""
 )
 
 
