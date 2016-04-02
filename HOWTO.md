@@ -12,7 +12,7 @@ requirements.
 
 The most up-to date version of this document is available at:
 
-    https://github.com/okcashpro/electrum-ok-server/blob/master/HOWTO.md
+    https://github.com/kobocoin/electrum-kobo-server/blob/master/HOWTO.md
 
 Conventions
 -----------
@@ -20,8 +20,8 @@ Conventions
 In this document, lines starting with a hash sign (#) or a dollar sign ($)
 contain commands. Commands starting with a hash should be run as root,
 commands starting with a dollar should be run as a normal user (in this
-document, we assume that user is called 'okcash'). We also assume the
-okcash user has sudo rights, so we use '$ sudo command' when we need to.
+document, we assume that user is called 'kobocoin'). We also assume the
+kobocoin user has sudo rights, so we use '$ sudo command' when we need to.
 
 Strings that are surrounded by "lower than" and "greater than" ( < and > )
 should be replaced by the user with something appropriate. For example,
@@ -67,50 +67,50 @@ has enough RAM to hold and process the leveldb database in tmpfs (e.g. /dev/shm)
 Instructions
 ------------
 
-### Step 1. Create a user for running okcashd and Electrum server
+### Step 1. Create a user for running Kobocoind and Electrum server
 
 This step is optional, but for better security and resource separation I
-suggest you create a separate user just for running `okcashd` and Electrum.
+suggest you create a separate user just for running `Kobocoind` and Electrum.
 We will also use the `~/bin` directory to keep locally installed files
 (others might want to use `/usr/local/bin` instead). We will download source
 code files to the `~/src` directory.
 
-    $ sudo adduser okcash --disabled-password
+    $ sudo adduser kobocoin --disabled-password
     $ sudo apt-get install git
-    $ sudo su - okcash
+    $ sudo su - kobocoin
     $ mkdir ~/bin ~/src
     $ echo $PATH
 
-If you don't see `/home/okcash/bin` in the output, you should add this line
+If you don't see `/home/kobocoin/bin` in the output, you should add this line
 to your `.bashrc`, `.profile`, or `.bash_profile`, then logout and relogin:
 
     PATH="$HOME/bin:$PATH"
     $ exit
 
-### Step 2. Download okcashd
+### Step 2. Download Kobocoind
 
-We currently recommend okcashd v3.0.0.0
+We currently recommend Kobocoind v2.1.0.3
 
-If you prefer to compile okcashd, here are some pointers for Ubuntu:
+If you prefer to compile Kobocoind, here are some pointers for Ubuntu:
 
     $ sudo apt-get install make g++ python-leveldb libboost-all-dev libssl-dev libdb++-dev pkg-config automake libtool
     $ sudo su - okcash
-    $ cd ~/src && git clone https://github.com/okcashpro/okcash.git 
-    $ cd okcash/src
+    $ cd ~/src && git clone https://bitbucket.org/TheTribesman/kobocoin.git 
+    $ cd Kobocoin/src
     $ make -f makefile.unix
-    $ strip okcashd src
-    $ cp -a okcashd src ~/bin
+    $ strip Kobocoind src
+    $ cp -a Kobocoind src ~/bin
 
-### Step 3. Configure and start okcashd
+### Step 3. Configure and start Kobocoind
 
-In order to allow Electrum to "talk" to `okcashd`, we need to set up an RPC
-username and password for `okcashd`. We will then start `okcashd` and
+In order to allow Electrum to "talk" to `Kobocoind`, we need to set up an RPC
+username and password for `Kobocoind`. We will then start `Kobocoind` and
 wait for it to complete downloading the blockchain.
 
-    $ mkdir ~/.okcash
-    $ $EDITOR ~/.okcash/okcash.conf
+    $ mkdir ~/.Kobocoin
+    $ $EDITOR ~/.Kobocoin/Kobocoin.conf
 
-Write this in `okcash.conf`:
+Write this in `Kobocoin.conf`:
 
     rpcuser=<rpc-username>
     rpcpassword=<rpc-password>
@@ -119,24 +119,24 @@ Write this in `okcash.conf`:
     disablewallet=1
 
 
-If you have an existing installation of okcashd and have not previously
+If you have an existing installation of Kobocoind and have not previously
 set txindex=1 you need to reindex the blockchain by running
 
-    $ ./okcashd -reindex
+    $ ./Kobocoind -reindex
 
-If you already have a freshly indexed copy of the blockchain with txindex start `okcashd`:
+If you already have a freshly indexed copy of the blockchain with txindex start `Kobocoind`:
 
-    $ ./okcashd
+    $ ./Kobocoind
 
-Allow some time to pass, so `okcashd` connects to the network and starts
+Allow some time to pass, so `Kobocoind` connects to the network and starts
 downloading blocks. You can check its progress by running:
 
-    $ ./okcashd getinfo
+    $ ./Kobocoind getinfo
 
-Before starting the electrum server your okcashd should have processed all
+Before starting the electrum server your Kobocoind should have processed all
 blocks and caught up to the current height of the network (not just the headers).
-You should also set up your system to automatically start okcashd at boot
-time, running as the 'okcash' user. Check your system documentation to
+You should also set up your system to automatically start Kobocoind at boot
+time, running as the 'kobocoin' user. Check your system documentation to
 find out the best way to do this.
 
 ### Step 4. Download and install Electrum Server
@@ -144,8 +144,8 @@ find out the best way to do this.
 We will download the latest git snapshot for Electrum to configure and install it:
 
     $ cd ~
-    $ git clone https://github.com/okcashpro/electrum-ok-server.git
-    $ cd electrum-ok-server
+    $ git clone https://github.com/kobocoin/electrum-kobo-server.git
+    $ cd electrum-kobo-server
     $ sudo configure
     $ sudo python setup.py install
 
@@ -193,8 +193,8 @@ It's recommended to fetch a pre-processed leveldb from the net.
 The "configure" script above will offer you to download a database with pruning limit 100.
 
 You can fetch recent copies of electrum leveldb databases with differnt pruning limits 
-and further instructions from the Electrum-OK full archival server foundry at:
-http://okcash.co/electrum/
+and further instructions from the Electrum-KOBO full archival server foundry at:
+http://kobocoin.com/electrum/
 
 
 Alternatively, if you have the time and nerve, you can import the blockchain yourself.
@@ -262,11 +262,11 @@ in case you need to restore it.
 
 ### Step 9. Configure Electrum server
 
-Electrum reads a config file (/etc/electrum-ok.conf) when starting up. This
-file includes the database setup, okcashd RPC setup, and a few other
+Electrum reads a config file (/etc/electrum-kobo.conf) when starting up. This
+file includes the database setup, Kobocoind RPC setup, and a few other
 options.
 
-The "configure" script listed above will create a config file at /etc/electrum-ok.conf
+The "configure" script listed above will create a config file at /etc/electrum-kobo.conf
 which you can edit to modify the settings.
 
 Go through the config options and set them to your liking.
@@ -278,27 +278,27 @@ Electrum server currently needs quite a few file handles to use leveldb. It also
 file handles for each connection made to the server. It's good practice to increase the
 open files limit to 64k. 
 
-The "configure" script will take care of this and ask you to create a user for running electrum-ok-server.
-If you're using user okcash to run electrum and have added it manually like shown in this HOWTO run 
+The "configure" script will take care of this and ask you to create a user for running electrum-kobo-server.
+If you're using user kobocoin to run electrum and have added it manually like shown in this HOWTO run 
 the following code to add the limits to your /etc/security/limits.conf:
 
-     echo "okcash hard nofile 65536" >> /etc/security/limits.conf
-     echo "okcash soft nofile 65536" >> /etc/security/limits.conf
+     echo "kobocoin hard nofile 65536" >> /etc/security/limits.conf
+     echo "kobocoin soft nofile 65536" >> /etc/security/limits.conf
 
 Two more things for you to consider:
 
-1. To increase security you may want to close okcashd for incoming connections and connect outbound only
+1. To increase security you may want to close Kobocoind for incoming connections and connect outbound only
 
-2. Consider restarting okcashd (together with electrum-ok-server) on a weekly basis to clear out unconfirmed
+2. Consider restarting Kobocoind (together with electrum-kobo-server) on a weekly basis to clear out unconfirmed
    transactions from the local the memory pool which did not propagate over the network.
 
 ### Step 11. (Finally!) Run Electrum server
 
 The magic moment has come: you can now start your Electrum server as root (it will su to your unprivileged user):
 
-    # electrum-ok-server start
+    # electrum-kobo-server start
 
-Note: If you want to run the server without installing it on your system, just run 'run_electrum_ok_server" as the
+Note: If you want to run the server without installing it on your system, just run 'run_electrum_kobo_server" as the
 unprivileged user.
 
 You should see this in the log file:
@@ -307,15 +307,15 @@ You should see this in the log file:
 
 If you want to stop Electrum server, use the 'stop' command:
 
-    # electrum-ok-server stop
+    # electrum-kobo-server stop
 
 
-If your system supports it, you may add electrum-ok-server to the /etc/init.d directory. 
+If your system supports it, you may add electrum-kobo-server to the /etc/init.d directory. 
 This will ensure that the server is started and stopped automatically, and that the database is closed 
 safely whenever your machine is rebooted.
 
-    # ln -s `which electrum-ok-server` /etc/init.d/electrum-ok-server
-    # update-rc.d electrum-ok-server defaults
+    # ln -s `which electrum-kobo-server` /etc/init.d/electrum-kobo-server
+    # update-rc.d electrum-kobo-server defaults
 
 ### Step 12. Test the Electrum server
 
@@ -328,14 +328,14 @@ or hostname and the port. Press 'Ok' and the client will disconnect from the
 current server and connect to your new Electrum server. You should see your
 addresses and transactions history. You can see the number of blocks and
 response time in the Server selection window. You should send/receive some
-$OK's to confirm that everything is working properly.
+$KOBO's to confirm that everything is working properly.
 
 ### Step 13. Join us on IRC, subscribe to the server thread
 
 Say hi to the dev crew, other server operators, and fans on
-irc.freenode.net #okcash and we'll try to congratulate you
-on supporting the community by running an Electrum-OK node.
+irc.freenode.net #kobocoin and we'll try to congratulate you
+on supporting the community by running an Electrum-KOBO node.
 
-If you're operating a public Electrum-OK server please share the announce at:
-https://bitcointalk.org/index.php?topic=1028368.0
-It contain announcements about important updates to OKCash.
+If you're operating a public Electrum-KOBO server please share the announce at:
+https://bitcointalk.org/index.php?topic=920290.0
+It contain announcements about important updates to Kobocoin.
