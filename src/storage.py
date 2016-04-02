@@ -8,7 +8,7 @@ from processor import print_log, logger
 from utils import bc_address_to_hash_160, hash_160_to_pubkey_address, hex_to_int, int_to_hex, Hash
 
 global GENESIS_HASH
-GENESIS_HASH = '0000046309984501e5e724498cddb4aff41a126927355f64b44f1b8bba4f447e'
+GENESIS_HASH = '00000c98be708f9ff86319738d4ce8778f1db7ce140d2d665cca9281eef433bd'
 
 """
 Patricia tree for hashing unspents
@@ -105,7 +105,7 @@ class Storage(object):
     def listunspent(self, addr):
         key = self.address_to_key(addr)
         if key is None:
-            raise BaseException('Invalid OKCash address', addr)
+            raise BaseException('Invalid Kobocoin address', addr)
 
         out = []
         for k, v in self.db_utxo.iterator(start=key):
