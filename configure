@@ -109,7 +109,7 @@ chown $user:$user $logfile
 
 bitcoind_user=$(read_config "bitcoind_user")
 if ! [ "$bitcoind_user" ]; then
-    read -p "rpcuser (from your okcash.conf file): " -r
+    read -p "rpcuser (from your Kobocoin.conf file): " -r
     write_config "bitcoind_user" $REPLY
 fi
 
