@@ -28,7 +28,7 @@ import imp
 
 
 if os.path.dirname(os.path.realpath(__file__)) == os.getcwd():
-    imp.load_module('electrumokserver', *imp.find_module('src'))
+    imp.load_module('electrumkoboserver', *imp.find_module('src'))
   
 
 from electrumokserver import storage, networks, utils
