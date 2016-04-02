@@ -27,7 +27,7 @@ pruning_limit = 1000
 
 [bitcoind]
 bitcoind_host = 127.0.0.1
-bitcoind_port = 6969
-# user and password from okcash.conf
+bitcoind_port = 9011
+# user and password from Kobocoin.conf
 bitcoind_user = 
 bitcoind_password = 
