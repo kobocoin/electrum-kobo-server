@@ -11,12 +11,12 @@ stratum_tcp_port = 5040
 #report_stratum_tcp_port = 5043
 #report_stratum_tcp_ssl_port = 5044
 banner = Welcome to Electrum-OK!
-banner_file = /etc/electrum-ok.banner
+banner_file = /etc/electrum-kobo.banner
 #irc = no
 #irc_nick = <yournickname>
 #ssl_certfile = /path/to/server.crt
 #ssl_keyfile = /path/to/server.key
-logfile = /var/log/electrum-ok.log
+logfile = /var/log/electrum-kobo.log
 donation_address = 
 
 [leveldb]
