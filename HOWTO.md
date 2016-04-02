@@ -328,7 +328,7 @@ or hostname and the port. Press 'Ok' and the client will disconnect from the
 current server and connect to your new Electrum server. You should see your
 addresses and transactions history. You can see the number of blocks and
 response time in the Server selection window. You should send/receive some
-$KOBO's to confirm that everything is working properly.
+KOBO to confirm that everything is working properly.
 
 ### Step 13. Join us on IRC, subscribe to the server thread
 
