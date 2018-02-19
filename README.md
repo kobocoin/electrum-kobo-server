@@ -1,4 +1,4 @@
-Electrum Kobocoin Server
+Kobocoin Electrum Server
 =========================================
   * Language: Python
   * Authors: ThomasV (orig.btc), oktoshi (mod.ok), TheTribesman (dev.kobo)
