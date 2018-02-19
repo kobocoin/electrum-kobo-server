@@ -1,4 +1,3 @@
-![Electrum-OK](http://kobocoin.com/kobocoin.png)
 Electrum Kobocoin Server
 =========================================
   * Language: Python
